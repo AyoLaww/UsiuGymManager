@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { useAuth } from "@/lib/useAuth";
 import { getUserBooking, joinSession, leaveSession } from "@/lib/bookingsService";
+import { toast } from "sonner";
 
 export default function UserPage() {
   const [sessions, setSessions] = useState<any[]>([]);
@@ -53,8 +54,12 @@ export default function UserPage() {
     fetchData();
   }, []);
 
-  const handleJoin = async (sessionId: string) => {
+  const handleJoin = async (sessionId: string, maxCapacity: number, currentParticipants: number) => {
     if (!user) return;
+    if (currentParticipants >= maxCapacity) {
+      setError("This session is full. You can't join a full session.");
+      return;
+    }
     try {
       const bookingData = await joinSession(user.id, sessionId);
       setBooking(bookingData);
@@ -67,6 +72,7 @@ export default function UserPage() {
         });
         setParticipantCounts(countsMap);
       }
+      setError(null); // Clear error on successful join
     } catch (e: any) {
       setError(e.message);
     }
@@ -93,7 +99,7 @@ export default function UserPage() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <Header userName="Jane Doe" />
+      <Header userName="" />
       <main className="max-w-7xl mx-auto px-6 py-8">
         <h2 className="text-2xl font-bold mb-6 text-blue-900">Available Gym Sessions</h2>
         {error && <p className="text-red-500 mb-2">{error}</p>}
@@ -113,7 +119,7 @@ export default function UserPage() {
                   end_time={session.end_time}
                   max_capacity={session.max_capacity}
                   current_participants={current_participants}
-                  onJoin={joined ? handleLeave : () => handleJoin(session.id)}
+                  onJoin={joined ? handleLeave : () => handleJoin(session.id, session.max_capacity, current_participants)}
                   joined={joined}
                 />
               );
