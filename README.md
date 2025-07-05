@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🏋️‍♀️ USIU Gym Session Manager
 
-## Getting Started
+A full-stack gym session management web app for USIU gym facilities.  
+Built using **Next.js**, **Supabase**, **Tailwind CSS** and **ShadcnUI** — with role-based authentication, session booking, and admin controls.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ✨ Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### ✅ User Authentication
+- Email/password sign-up & login via Supabase Auth
+- Role-based redirects and protected routes (User, Instructor, Admin)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 🧍‍♂️ User Dashboard
+- Browse available gym sessions
+- Join or cancel a session
+- View real-time available slots based on capacity
+- Prevent overbooking
+- View sessions already joined
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 🛠️ Admin Dashboard
+- Add, edit, and delete gym sessions
+- View participant count (via SQL view)
+- Prevent duplicate or invalid sessions
 
-## Learn More
+### 🔐 Route Protection
+- Middleware enforces:
+  - Authenticated access to `/admin` and `/user`
+  - Automatic redirect to `/auth` if unauthenticated
+  - Role-based routing after login
 
-To learn more about Next.js, take a look at the following resources:
+### 🧠 Backend Logic (Supabase)
+- **Sessions Table**: Stores all gym session data (location, day, time, max_capacity)
+- **Users Table**: Stores user roles (admin/user/instructor)
+- **Bookings Table**: Maps users to sessions they've joined
+- **SQL View (`session_participants`)**: Returns session ID + participant count
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📦 Tech Stack
 
-## Deploy on Vercel
+- **Frontend**: [Next.js 14](https://nextjs.org/), [Tailwind CSS](https://tailwindcss.com/), [Shadcn](https://ui.shadcn.com)
+- **Backend**: [Supabase](https://supabase.com/) (auth, database, API)
+- **Auth Helpers**: `@supabase/ssr` for server-side auth sessions
+- **UI**: Custom components using `shadcn/ui`, `lucide-react`, and Radix primitives
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
