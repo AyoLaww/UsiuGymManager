@@ -32,10 +32,18 @@ const AddSessionForm: FC<AddSessionFormProps> = ({ onAddSession }) => {
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [maxCapacity, setMaxCapacity] = useState("");
+  const [formError, setFormError] = useState<string | null>(null);
+
+  const isPastDate = date ? date < new Date(new Date().setHours(0,0,0,0)) : false;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!location || !date || !startTime || !endTime || !maxCapacity) return;
+    if (isPastDate) {
+      setFormError("You cannot select a date in the past.");
+      return;
+    }
+    setFormError(null);
     onAddSession({
       location,
       date: format(date, "yyyy-MM-dd"),
@@ -127,8 +135,9 @@ const AddSessionForm: FC<AddSessionFormProps> = ({ onAddSession }) => {
           />
         </div>
         {/* Submit */}
-        <div className="col-span-1 md:col-span-2 flex justify-start mt-2">
-          <Button type="submit">Add Session</Button>
+        <div className="col-span-1 md:col-span-2 flex flex-col justify-start mt-2">
+          {formError && <span className="text-red-500 mb-2">{formError}</span>}
+          <Button type="submit" disabled={isPastDate}>Add Session</Button>
         </div>
       </form>
     </Card>
