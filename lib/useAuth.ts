@@ -68,12 +68,19 @@ export const useAuth = () => {
       };
       
 
+    // Get current user (client-side)
+    const getCurrentUser = async () => {
+        const { data } = await supabase.auth.getUser();
+        return data.user;
+    };
+
     return {
         loading,
         error, 
         signIn,
         signUp,
         signOut,
+        getCurrentUser,
     }
 };
 

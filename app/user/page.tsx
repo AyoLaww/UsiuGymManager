@@ -4,25 +4,92 @@ import Header from "@/components/Header";
 import SessionCard from "@/components/SessionCard";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
+import { useAuth } from "@/lib/useAuth";
+import { getUserBooking, joinSession, leaveSession } from "@/lib/bookingsService";
 
 export default function UserPage() {
   const [sessions, setSessions] = useState<any[]>([]);
+  const [participantCounts, setParticipantCounts] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [user, setUser] = useState<any>(null);
+  const [booking, setBooking] = useState<any>(null);
+  const { getCurrentUser } = useAuth();
 
   useEffect(() => {
-    const fetchSessions = async () => {
-      const { data, error } = await supabase.from("sessions").select("*");
-      if (error) {
-        setError("Error fetching sessions: " + error.message);
+    const fetchData = async () => {
+      setLoading(true);
+      const userObj = await getCurrentUser();
+      setUser(userObj);
+      if (!userObj) {
+        setError("User not found");
         setLoading(false);
         return;
       }
-      setSessions(data || []);
+      const { data: sessionData, error: sessionError } = await supabase.from("sessions").select("*");
+      if (sessionError) {
+        setError("Error fetching sessions: " + sessionError.message);
+        setLoading(false);
+        return;
+      }
+      setSessions(sessionData || []);
+      try {
+        const bookingData = await getUserBooking(userObj.id);
+        setBooking(bookingData);
+      } catch (e) {
+        setBooking(null);
+      }
+      // Fetch participant counts
+      const { data: countsData, error: countsError } = await supabase.from("session_participants").select("*");
+      if (!countsError && countsData) {
+        const countsMap: Record<string, number> = {};
+        countsData.forEach((row: any) => {
+          countsMap[row.session_id] = row.participant_count;
+        });
+        setParticipantCounts(countsMap);
+      }
       setLoading(false);
     };
-    fetchSessions();
+    fetchData();
   }, []);
+
+  const handleJoin = async (sessionId: string) => {
+    if (!user) return;
+    try {
+      const bookingData = await joinSession(user.id, sessionId);
+      setBooking(bookingData);
+      // Refetch participant counts after joining
+      const { data: countsData } = await supabase.from("session_participants").select("*");
+      if (countsData) {
+        const countsMap: Record<string, number> = {};
+        countsData.forEach((row: any) => {
+          countsMap[row.session_id] = row.participant_count;
+        });
+        setParticipantCounts(countsMap);
+      }
+    } catch (e: any) {
+      setError(e.message);
+    }
+  };
+
+  const handleLeave = async () => {
+    if (!booking) return;
+    try {
+      await leaveSession(booking.id);
+      setBooking(null);
+      // Refetch participant counts after leaving
+      const { data: countsData } = await supabase.from("session_participants").select("*");
+      if (countsData) {
+        const countsMap: Record<string, number> = {};
+        countsData.forEach((row: any) => {
+          countsMap[row.session_id] = row.participant_count;
+        });
+        setParticipantCounts(countsMap);
+      }
+    } catch (e: any) {
+      setError(e.message);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -34,18 +101,23 @@ export default function UserPage() {
           <p>Loading sessions...</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {sessions.map((session) => (
-              <SessionCard
-                key={session.id}
-                location={session.location}
-                date={session.date}
-                start_time={session.start_time}
-                end_time={session.end_time}
-                max_capacity={session.max_capacity}
-                current_participants={0} // TODO: Replace with real participant count
-                onJoin={() => {}}
-              />
-            ))}
+            {sessions.map((session) => {
+              const joined = booking && booking.session_id === session.id;
+              const current_participants = participantCounts[session.id] || 0;
+              return (
+                <SessionCard
+                  key={session.id}
+                  location={session.location}
+                  date={session.date}
+                  start_time={session.start_time}
+                  end_time={session.end_time}
+                  max_capacity={session.max_capacity}
+                  current_participants={current_participants}
+                  onJoin={joined ? handleLeave : () => handleJoin(session.id)}
+                  joined={joined}
+                />
+              );
+            })}
           </div>
         )}
       </main>
