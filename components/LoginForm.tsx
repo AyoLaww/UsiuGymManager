@@ -53,9 +53,6 @@ export default function LoginForm() {
       case "admin":
         router.push("/admin");
         break;
-      case "instructor":
-        router.push("/instructor");
-        break;
       default:
         router.push("/user");
     }
