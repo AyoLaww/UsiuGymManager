@@ -45,3 +45,6 @@ Built using **Next.js**, **Supabase**, **Tailwind CSS** and **ShadcnUI** — wit
 - **UI**: Custom components using `shadcn/ui`, `lucide-react`, and Radix primitives
 
 ---
+
+👨‍💻 Dev
+Built by [Law].
