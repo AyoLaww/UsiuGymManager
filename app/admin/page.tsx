@@ -6,7 +6,8 @@ import SessionList from "@/components/SessionList";
 import EditSessionToast from "@/components/EditSessionToast";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import { addSession, updateSession, deleteSession, Session, SessionInput } from "@/lib/sessionService";
+import { SessionInput } from "@/lib/sessionService";
+import { Session } from "@/lib/models/Session";
 
 export default function AdminPage() {
   const [sessions, setSessions] = useState<Session[]>([]);
@@ -19,12 +20,13 @@ export default function AdminPage() {
   // Load sessions from Supabase
   useEffect(() => {
     const fetchSessions = async () => {
-      const { data, error } = await supabase.from("sessions").select("*");
-      if (error) {
+      try {
+        const sessionObjs = await Session.fetchAll();
+        setSessions(sessionObjs);
+      } catch (error: any) {
         setError("Error fetching sessions: " + error.message);
         return;
       }
-      setSessions(data as Session[]);
       setLoading(false);
     };
     fetchSessions();
@@ -33,7 +35,7 @@ export default function AdminPage() {
   // Add new session using sessionService
   const handleAddSession = async (session: SessionInput) => {
     try {
-      const newSession = await addSession(session);
+      const newSession = await Session.create(session);
       setSessions((prev) => [...prev, newSession]);
     } catch (err: any) {
       setError("Error adding session: " + err.message);
@@ -43,7 +45,9 @@ export default function AdminPage() {
   // Delete session using sessionService
   const handleDeleteSession = async (id: string) => {
     try {
-      await deleteSession(id);
+      const session = sessions.find((s) => s.id === id);
+      if (!session) return;
+      await session.delete();
       setSessions((prev) => prev.filter((s) => s.id !== id));
     } catch (err: any) {
       setError("Error deleting session: " + err.message);
@@ -69,7 +73,9 @@ export default function AdminPage() {
   const handleSaveEdit = async (data: SessionInput) => {
     if (!editSessionId) return;
     try {
-      const updated = await updateSession(editSessionId, data);
+      const session = sessions.find((s) => s.id === editSessionId);
+      if (!session) return;
+      const updated = await session.update(data);
       setSessions((prev) => prev.map((s) => (s.id === editSessionId ? updated : s)));
       setEditOpen(false);
       setEditSessionId(null);

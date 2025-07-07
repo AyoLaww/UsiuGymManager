@@ -1,14 +1,6 @@
 import { FC } from "react";
 import AdminSessionCard from "./AdminSessionCard";
-
-interface Session {
-  id: string;
-  location: string;
-  date: string;
-  start_time: string;
-  end_time: string;
-  max_capacity: number;
-}
+import { Session } from "@/lib/models/Session";
 
 interface SessionListProps {
   sessions: Session[];

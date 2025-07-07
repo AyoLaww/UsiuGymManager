@@ -7,9 +7,10 @@ import { supabase } from "@/lib/supabaseClient";
 import { useAuth } from "@/lib/useAuth";
 import { getUserBooking, joinSession, leaveSession } from "@/lib/bookingsService";
 import { toast } from "sonner";
+import { Session } from "@/lib/models/Session";
 
 export default function UserPage() {
-  const [sessions, setSessions] = useState<any[]>([]);
+  const [sessions, setSessions] = useState<Session[]>([]);
   const [participantCounts, setParticipantCounts] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -27,13 +28,14 @@ export default function UserPage() {
         setLoading(false);
         return;
       }
-      const { data: sessionData, error: sessionError } = await supabase.from("sessions").select("*");
-      if (sessionError) {
+      try {
+        const sessionObjs = await Session.fetchAll();
+        setSessions(sessionObjs);
+      } catch (sessionError: any) {
         setError("Error fetching sessions: " + sessionError.message);
         setLoading(false);
         return;
       }
-      setSessions(sessionData || []);
       try {
         const bookingData = await getUserBooking(userObj.id);
         setBooking(bookingData);
@@ -72,7 +74,7 @@ export default function UserPage() {
         });
         setParticipantCounts(countsMap);
       }
-      setError(null); // Clear error on successful join
+      setError(null); 
     } catch (e: any) {
       setError(e.message);
     }
