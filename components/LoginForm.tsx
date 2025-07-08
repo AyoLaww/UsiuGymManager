@@ -80,9 +80,9 @@ export default function LoginForm() {
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto">
-      <CardHeader>
-        <CardTitle>Welcome</CardTitle>
+    <Card className="w-full max-w-md mx-auto border-none shadow-none">
+      <CardHeader className="flex flex-col gap-2 items-center">
+        <CardTitle>Welcome back!</CardTitle>
         <CardDescription>
           Enter your credentials to access your account
         </CardDescription>
@@ -90,23 +90,22 @@ export default function LoginForm() {
 
       <CardContent className="flex flex-col gap-6">
         <form className="flex flex-col gap-10" onSubmit={(e) => e.preventDefault()}>
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-5">
             <div className="flex flex-col gap-2">
-              <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
                 type="email"
-                placeholder="your.email@usiu.ac.ke"
+                placeholder="Email Address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 autoComplete="email"
                 required
+                className="py-6"
               />
               {error && <p className="text-red-500 text-sm font-medium">{error}</p>}
             </div>
 
             <div className="flex flex-col gap-2">
-              <Label htmlFor="password">Password</Label>
               <div className="relative">
                 <Input
                   id="password"
@@ -116,7 +115,7 @@ export default function LoginForm() {
                   onChange={(e) => setPassword(e.target.value)}
                   autoComplete="current-password"
                   required
-                  className="pr-10"
+                  className="pr-10 py-6"
                 />
                 {error && <p className="text-red-500 text-sm font-medium">{error}</p>}
                 <button
@@ -126,51 +125,8 @@ export default function LoginForm() {
                   className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground focus:outline-none"
                   onClick={() => setShowPassword((v) => !v)}
                 >
-                  {showPassword ? (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-5 h-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M13.875 18.825A10.05 10.05 0 0112 19c-5 0-9.27-3.11-10.5-7.5a10.05 10.05 0 012.563-4.568m2.1-2.1A9.956 9.956 0 0112 5c5 0 9.27 3.11 10.5 7.5a9.956 9.956 0 01-4.198 5.568M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                      />
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M3 3l18 18"
-                      />
-                    </svg>
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-5 h-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                      />
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                      />
-                    </svg>
-                  )}
+                  {showPassword ? <p className="text-xs">hide</p> : <p className="text-xs">show</p>}
                 </button>
-                <div className="absolute right-0 top-full mt-1 text-xs text-blue-600 cursor-pointer select-none">
-                  <a href="#" className="hover:underline">Forgot password?</a>
-                </div>
               </div>
             </div>
           </div>
@@ -178,7 +134,7 @@ export default function LoginForm() {
           <div className="flex flex-col gap-3">
             <Button
               type="button"
-              className="mt-2 w-full flex items-center justify-center gap-2"
+              className="mt-2 w-full flex items-center justify-center gap-2 bg-blue-500 text-white hover:bg-blue-600"
               onClick={handleLogin}
               disabled={loading}
             >

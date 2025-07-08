@@ -43,7 +43,7 @@ const SessionCard: FC<SessionCardProps> = ({ location, date, start_time, end_tim
       <Progress value={max_capacity === 0 ? 0 : (current_participants / max_capacity) * 100} />
     </div>
     <Button
-      className="mt-2"
+      className={`mt-2 ${joined ? "bg-red-500 hover:bg-red-600" : "bg-blue-500 hover:bg-blue-600"}`}
       onClick={onJoin}
       variant={joined ? "destructive" : "default"}
       disabled={!onJoin}
