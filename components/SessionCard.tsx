@@ -16,12 +16,12 @@ interface SessionCardProps {
 }
 
 const SessionCard: FC<SessionCardProps> = ({ location, date, start_time, end_time, max_capacity, current_participants, onJoin, joined }) => (
-  <Card className="p-5 w-full max-w-xs flex flex-col gap-4 border border-blue-200">
+  <Card className="p-5 w-full max-w-xs flex flex-col gap-4 drop-shadow-none">
     <div className="flex items-center gap-2 text-blue-600 font-semibold text-base">
       <MapPin size={18} />
       <span>{location}</span>
     </div>
-    <div className="flex flex-col gap-1 text-gray-700 text-sm">
+    <div className="flex flex-col gap-3 text-gray-700 text-sm">
       <div className="flex items-center gap-2">
         <Calendar size={16} />
         <span>{date}</span>
@@ -37,10 +37,10 @@ const SessionCard: FC<SessionCardProps> = ({ location, date, start_time, end_tim
     </div>
     <div>
       <div className="flex justify-between text-xs font-semibold mb-1">
-        <span>Participants</span>
-        <span>{current_participants}/{max_capacity}</span>
+        <span className="text-blue-600">Participants</span>
+        <span className="text-blue-600 font-semibold">{current_participants}/{max_capacity}</span>
       </div>
-      <Progress value={max_capacity === 0 ? 0 : (current_participants / max_capacity) * 100} />
+      <Progress className="text-blue-600" value={max_capacity === 0 ? 0 : (current_participants / max_capacity) * 100} />
     </div>
     <Button
       className={`mt-2 ${joined ? "bg-red-500 hover:bg-red-600" : "bg-blue-500 hover:bg-blue-600"}`}

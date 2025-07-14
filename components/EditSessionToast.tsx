@@ -46,11 +46,11 @@ const EditSessionToast: FC<EditSessionToastProps> = ({ open, initialData, onSave
 
   return (
     <div className="fixed bottom-4 right-4 z-50 bg-white border rounded-lg shadow-lg p-6 w-full max-w-md flex flex-col gap-4">
-      <h3 className="text-lg font-semibold mb-2">Edit Session</h3>
+      <h3 className="text-lg font-semibold mb-2 text-blue-600">Edit Session</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Location */}
         <div>
-          <label className="block mb-1">Location</label>
+          <label className="block mb-1 text-blue-600">Location</label>
           <Select value={location} onValueChange={setLocation}>
             <SelectTrigger id="edit-location">
               <SelectValue placeholder="Select location" />
@@ -64,7 +64,7 @@ const EditSessionToast: FC<EditSessionToastProps> = ({ open, initialData, onSave
         </div>
         {/* Date */}
         <div>
-          <label className="block mb-1">Date</label>
+          <label className="block mb-1 text-blue-600">Date</label>
           <Popover>
             <PopoverTrigger asChild>
               <Button
@@ -87,7 +87,7 @@ const EditSessionToast: FC<EditSessionToastProps> = ({ open, initialData, onSave
         </div>
         {/* Start Time */}
         <div>
-          <label className="block mb-1">Start Time</label>
+          <label className="block mb-1 text-blue-600">Start Time</label>
           <Input
             id="edit-start_time"
             type="time"
@@ -97,7 +97,7 @@ const EditSessionToast: FC<EditSessionToastProps> = ({ open, initialData, onSave
         </div>
         {/* End Time */}
         <div>
-          <label className="block mb-1">End Time</label>
+          <label className="block mb-1 text-blue-600">End Time</label>
           <Input
             id="edit-end_time"
             type="time"
@@ -107,7 +107,7 @@ const EditSessionToast: FC<EditSessionToastProps> = ({ open, initialData, onSave
         </div>
         {/* Max Capacity */}
         <div>
-          <label className="block mb-1">Maximum Capacity</label>
+          <label className="block mb-1 text-blue-600">Maximum Capacity</label>
           <Input
             id="edit-max_capacity"
             type="number"
@@ -119,7 +119,7 @@ const EditSessionToast: FC<EditSessionToastProps> = ({ open, initialData, onSave
       </div>
       <div className="flex justify-end gap-2 mt-4">
         <Button variant="outline" onClick={onCancel}>Cancel</Button>
-        <Button onClick={handleSave}>Save</Button>
+        <Button className="bg-blue-500 text-white hover:bg-blue-600" onClick={handleSave}>Save</Button>
       </div>
     </div>
   );

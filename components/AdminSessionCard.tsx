@@ -14,7 +14,7 @@ interface AdminSessionCardProps {
 }
 
 const AdminSessionCard: FC<AdminSessionCardProps> = ({ location, date, start_time, end_time, max_capacity, onEdit, onDelete }) => (
-  <Card className="p-5 w-full max-w-xs flex flex-col gap-4 border border-blue-200">
+  <Card className="p-5 w-full max-w-xs flex flex-col gap-4 border">
     <div className="flex items-center gap-2 text-blue-600 font-semibold text-base">
       <MapPin size={18} />
       <span className="underline cursor-pointer">{location}</span>

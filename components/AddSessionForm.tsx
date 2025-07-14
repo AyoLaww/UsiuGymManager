@@ -59,14 +59,14 @@ const AddSessionForm: FC<AddSessionFormProps> = ({ onAddSession }) => {
   };
 
   return (
-    <Card className="p-6 mb-6 border-blue-200">
-      <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+    <Card className="p-6 mb-6 ">
+      <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-blue-600">
         Add New Gym Session
       </h2>
       <form className="grid grid-cols-1 md:grid-cols-2 gap-4" onSubmit={handleSubmit}>
         {/* Location */}
-        <div>
-          <Label htmlFor="location">Location</Label>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="location" className="text-blue-600">Location</Label>
           <Select value={location} onValueChange={setLocation}>
             <SelectTrigger id="location">
               <SelectValue placeholder="Select location" />
@@ -81,8 +81,8 @@ const AddSessionForm: FC<AddSessionFormProps> = ({ onAddSession }) => {
           </Select>
         </div>
         {/* Date */}
-        <div>
-          <Label htmlFor="date">Date</Label>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="date" className="text-blue-600">Date</Label>
           <Popover>
             <PopoverTrigger asChild>
               <Button
@@ -104,8 +104,8 @@ const AddSessionForm: FC<AddSessionFormProps> = ({ onAddSession }) => {
           </Popover>
         </div>
         {/* Start Time */}
-        <div>
-          <Label htmlFor="start_time">Start Time</Label>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="start_time" className="text-blue-600">Start Time</Label>
           <Input
             id="start_time"
             type="time"
@@ -114,8 +114,8 @@ const AddSessionForm: FC<AddSessionFormProps> = ({ onAddSession }) => {
           />
         </div>
         {/* End Time */}
-        <div>
-          <Label htmlFor="end_time">End Time</Label>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="end_time" className="text-blue-600">End Time</Label>
           <Input
             id="end_time"
             type="time"
@@ -124,8 +124,8 @@ const AddSessionForm: FC<AddSessionFormProps> = ({ onAddSession }) => {
           />
         </div>
         {/* Max Capacity */}
-        <div>
-          <Label htmlFor="max_capacity">Maximum Capacity</Label>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="max_capacity" className="text-blue-600">Maximum Capacity</Label>
           <Input
             id="max_capacity"
             type="number"
@@ -137,7 +137,7 @@ const AddSessionForm: FC<AddSessionFormProps> = ({ onAddSession }) => {
         {/* Submit */}
         <div className="col-span-1 md:col-span-2 flex flex-col justify-start mt-2">
           {formError && <span className="text-red-500 mb-2">{formError}</span>}
-          <Button type="submit" disabled={isPastDate}>Add Session</Button>
+          <Button type="submit" className="bg-blue-500 text-white hover:bg-blue-600" disabled={isPastDate}>Add Session</Button>
         </div>
       </form>
     </Card>
