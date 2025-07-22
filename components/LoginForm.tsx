@@ -71,7 +71,7 @@ export default function LoginForm() {
         role: "user",
       });
 
-      router.push("/user");
+      router.push(`/success?email=${encodeURIComponent(email)}`);
     } else {
       setError("Signup failed. Try again.");
     }
